@@ -1,0 +1,458 @@
+/* ===========================
+   AYO ABC — Stilmall
+   =========================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@600;700;800;900&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+  --radius-box: 18px;
+  --radius-key: 14px;
+  --font-display: 'Fredoka One', cursive;
+  --font-body: 'Nunito', sans-serif;
+}
+
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-body);
+  background: linear-gradient(160deg, #fff0f6 0%, #f0f4ff 45%, #edfcf1 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* ===========================
+   SCREENS
+   =========================== */
+
+.screen {
+  display: none;
+  min-height: 100dvh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  animation: fadeUp 0.35s ease;
+}
+
+.screen.active { display: flex; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===========================
+   FÖRÄLDRASKÄRM
+   =========================== */
+
+#parent-screen { gap: 1.2rem; text-align: center; }
+
+.hero-emoji {
+  font-size: 4.5rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-12px); }
+}
+
+.logo-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 12vw, 5.5rem);
+  line-height: 1;
+  background: linear-gradient(135deg, #ff6b6b 0%, #cc5de8 50%, #4d96ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tagline {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #adb5bd;
+}
+
+.input-card {
+  background: #fff;
+  border-radius: 28px;
+  padding: 2rem 1.75rem;
+  box-shadow: 0 10px 50px rgba(0,0,0,0.10);
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.input-label {
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #adb5bd;
+  text-align: left;
+}
+
+#parent-input {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  letter-spacing: 6px;
+  text-align: center;
+  text-transform: uppercase;
+  width: 100%;
+  padding: 0.65rem 1rem;
+  border: 3px solid #e9ecef;
+  border-radius: 16px;
+  background: #f8f9fa;
+  color: #212529;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+#parent-input:focus {
+  border-color: #9775fa;
+  background: #fff;
+}
+
+#parent-input.shake { animation: shake 0.45s ease; border-color: #ff6b6b; }
+
+.btn-start {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: 1px;
+  padding: 0.85rem 2rem;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #ff6b6b, #cc5de8);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 6px 0 #862e9c;
+  transition: transform 0.12s, box-shadow 0.12s;
+  user-select: none;
+}
+
+.btn-start:hover  { transform: translateY(-3px); box-shadow: 0 9px 0 #862e9c; }
+.btn-start:active { transform: translateY(3px);  box-shadow: 0 3px 0 #862e9c; }
+
+/* ===========================
+   SPELSKÄRM
+   =========================== */
+
+#game-screen {
+  gap: 1rem;
+  justify-content: flex-start;
+  padding-top: 1rem;
+}
+
+.game-top {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn-back {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  font-weight: 800;
+  background: rgba(0,0,0,0.07);
+  border: none;
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  color: #868e96;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn-back:hover { background: rgba(0,0,0,0.13); color: #495057; }
+
+.progress-track {
+  flex: 1;
+  height: 12px;
+  background: rgba(0,0,0,0.07);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+#progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #69db7c, #4dabf7);
+  border-radius: 999px;
+  transition: width 0.45s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+/* --- Ordvisning --- */
+
+#word-display {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 1rem;
+  min-height: 90px;
+  max-width: 720px;
+  width: 100%;
+}
+
+.word-spacer { width: 18px; }
+
+.letter-box {
+  width:  clamp(52px, 9vw, 74px);
+  height: clamp(52px, 9vw, 74px);
+  border-radius: var(--radius-box);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4.5vw, 2.2rem);
+  background: #fff;
+  border: 3px solid #e9ecef;
+  color: rgba(0,0,0,0.13);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: background 0.25s, border-color 0.25s, color 0.25s, box-shadow 0.25s;
+  user-select: none;
+  position: relative;
+}
+
+/* Bokstav "vagt" synlig = standard (ghost) */
+.letter-box { color: rgba(0,0,0,0.18); }
+
+/* Den bokstav som ska tryckas näst */
+.letter-box.current {
+  border-color: #9775fa;
+  color: rgba(100,60,200,0.30);
+  background: rgba(151,117,250,0.06);
+  box-shadow: 0 0 0 4px rgba(151,117,250,0.18), 0 4px 14px rgba(0,0,0,0.08);
+  animation: pulse 1.3s ease-in-out infinite;
+}
+
+/* Korrekt ifylld bokstav */
+.letter-box.filled {
+  color: #fff !important;
+  border-color: transparent !important;
+  box-shadow: 0 5px 18px rgba(0,0,0,0.18);
+  animation: pop 0.38s cubic-bezier(0.68,-0.55,0.27,1.55);
+}
+
+/* Felaktigt knapptryck */
+.letter-box.wrong { animation: shake 0.45s ease !important; border-color: #ff6b6b !important; }
+
+@keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50%      { transform: scale(1.07); }
+}
+
+@keyframes pop {
+  0%   { transform: scale(1); }
+  55%  { transform: scale(1.38); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20%     { transform: translateX(-8px); }
+  40%     { transform: translateX(8px); }
+  60%     { transform: translateX(-5px); }
+  80%     { transform: translateX(5px); }
+}
+
+/* --- Tangentbord --- */
+
+#keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  align-items: center;
+  padding-bottom: 1rem;
+}
+
+.kb-row {
+  display: flex;
+  gap: 0.35rem;
+  justify-content: center;
+}
+
+.key {
+  width:  clamp(38px, 7.5vw, 62px);
+  height: clamp(44px, 8.5vw, 66px);
+  border: none;
+  border-radius: var(--radius-key);
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 3vw, 1.55rem);
+  color: #fff;
+  cursor: pointer;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.22);
+  transition: transform 0.1s, filter 0.15s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.key:hover  { transform: translateY(-3px); filter: brightness(1.12); }
+.key.pressed,
+.key:active { transform: translateY(4px) !important; box-shadow: none !important; filter: brightness(0.9); }
+
+/* Hint: tangenten för rätt bokstav lyser upp */
+.key.hint {
+  animation: keyPulse 1s ease-in-out infinite;
+}
+
+.key.hint-strong {
+  animation: keyPulseStrong 0.65s ease-in-out infinite;
+  transform: scale(1.12);
+}
+
+@keyframes keyPulse {
+  0%,100% { filter: brightness(1); }
+  50%      { filter: brightness(1.35) saturate(1.4); }
+}
+
+@keyframes keyPulseStrong {
+  0%,100% { filter: brightness(1); }
+  50%      { filter: brightness(1.6) saturate(1.6) drop-shadow(0 0 6px rgba(255,255,255,0.7)); }
+}
+
+/* ===========================
+   FIRANDESKÄRM
+   =========================== */
+
+#celebration-screen {
+  justify-content: center;
+}
+
+.celebration-box {
+  background: #fff;
+  border-radius: 32px;
+  padding: 2.5rem 2rem;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 70px rgba(0,0,0,0.13);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  animation: bounceIn 0.55s cubic-bezier(0.68,-0.55,0.27,1.55);
+}
+
+@keyframes bounceIn {
+  0%   { transform: scale(0.4); opacity: 0; }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+.celebration-stars {
+  font-size: 2.2rem;
+  animation: starPop 0.6s cubic-bezier(0.68,-0.55,0.27,1.55);
+}
+
+@keyframes starPop {
+  0%   { transform: scale(0) rotate(-180deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+.celebration-heading {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 9vw, 3.5rem);
+  background: linear-gradient(135deg, #ff6b6b, #ffd43b, #69db7c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.celebration-word {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 6vw, 2.6rem);
+  letter-spacing: 5px;
+  padding: 0.9rem 1.5rem;
+  background: #f8f9fa;
+  border-radius: 16px;
+  color: #343a40;
+  word-break: break-all;
+}
+
+.celebration-trophy {
+  font-size: 3.5rem;
+  animation: float 2s ease-in-out infinite;
+}
+
+.btn-again {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  padding: 0.85rem 2rem;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #69db7c, #4dabf7);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 6px 0 #1c7f3d;
+  transition: transform 0.12s, box-shadow 0.12s;
+  user-select: none;
+}
+
+.btn-again:hover  { transform: translateY(-3px); box-shadow: 0 9px 0 #1c7f3d; }
+.btn-again:active { transform: translateY(3px);  box-shadow: 0 3px 0 #1c7f3d; }
+
+/* ===========================
+   KONFETTI
+   =========================== */
+
+.confetti {
+  position: fixed;
+  top: -20px;
+  pointer-events: none;
+  z-index: 9999;
+  animation: confettiFall linear forwards;
+  will-change: transform, top;
+}
+
+.confetti.round  { border-radius: 50%; }
+.confetti.square { border-radius: 3px; }
+.confetti.star {
+  clip-path: polygon(
+    50% 0%, 61% 35%, 98% 35%, 68% 57%,
+    79% 91%, 50% 70%, 21% 91%, 32% 57%,
+    2%  35%, 39% 35%
+  );
+}
+
+@keyframes confettiFall {
+  0%   { top: -20px;  transform: rotate(0deg) translateX(0);    opacity: 1; }
+  85%  {             transform: rotate(540deg) translateX(30px); opacity: 1; }
+  100% { top: 110vh; transform: rotate(720deg) translateX(50px); opacity: 0; }
+}
+
+/* ===========================
+   RESPONSIV
+   =========================== */
+
+@media (max-width: 480px) {
+  .key {
+    width: 31px;
+    height: 38px;
+    font-size: 0.88rem;
+    border-radius: 8px;
+  }
+  .kb-row { gap: 0.2rem; }
+  #keyboard { gap: 0.25rem; }
+  .letter-box { width: 48px; height: 48px; font-size: 1.4rem; }
+}
+
+@media (max-height: 680px) {
+  #game-screen { gap: 0.5rem; padding-top: 0.5rem; }
+  #word-display { min-height: 60px; }
+}

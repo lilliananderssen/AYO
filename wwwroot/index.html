@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>AYO ABC 🌈</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- 👨‍👧 Förälderskonfigurering -->
+  <div id="parent-screen" class="screen">
+    <div class="hero-emoji">🌈</div>
+    <h1 class="logo-title">AYO ABC</h1>
+    <p class="tagline">Skriv ett ord så får barnet öva!</p>
+
+    <div class="input-card">
+      <label class="input-label" for="parent-input">Ord eller mening</label>
+      <input
+        id="parent-input"
+        type="text"
+        placeholder="T.ex. EMMA"
+        maxlength="30"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="characters"
+        spellcheck="false"
+      >
+      <button class="btn-start" onclick="startGame()">
+        🚀 Starta!
+      </button>
+    </div>
+  </div>
+
+  <!-- 🎮 Spelplan -->
+  <div id="game-screen" class="screen">
+    <div class="game-top">
+      <button class="btn-back" onclick="showParentScreen()">←</button>
+      <div class="progress-track"><div id="progress-fill"></div></div>
+    </div>
+
+    <div id="word-display"></div>
+    <div id="keyboard"></div>
+  </div>
+
+  <!-- 🎉 Firande -->
+  <div id="celebration-screen" class="screen">
+    <div class="celebration-box">
+      <div class="celebration-stars">⭐ ⭐ ⭐</div>
+      <h2 class="celebration-heading">BRA JOBBAT!</h2>
+      <div id="celebration-word" class="celebration-word"></div>
+      <div class="celebration-trophy">🏆</div>
+      <button class="btn-again" onclick="showParentScreen()">
+        🎮 Spela igen!
+      </button>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
