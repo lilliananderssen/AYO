@@ -1,5 +1,5 @@
 /* ===========================
-   AYO ABC — Stilmall (Elevated)
+   AYO ABC — Stilmall
    =========================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@600;700;800;900&display=swap');
@@ -32,7 +32,7 @@ body {
 }
 
 /* ===========================
-   SKÄRMAR
+   SKARMAR
    =========================== */
 
 .screen {
@@ -55,40 +55,22 @@ body {
 }
 
 /* ===========================
-   STARTSKÄRM
+   STARTSKARM — Helskarmsbild
    =========================== */
 
 #start-screen {
-  background: var(--cream);
-  padding: 2rem 1.5rem;
+  padding: 0;
 }
 
-.polaroid {
-  background: #fff;
-  padding: 14px 14px 64px;
-  border-radius: 3px;
+.start-bg {
   width: 100%;
-  max-width: 480px;
-  box-shadow: 0 16px 60px rgba(0,0,0,0.22), 0 3px 10px rgba(0,0,0,0.1);
-  transform: rotate(-1.5deg);
-  animation: polaroidIn 0.65s cubic-bezier(0.34,1.56,0.64,1) both;
-}
-
-@keyframes polaroidIn {
-  from { transform: rotate(-1.5deg) scale(0.82); opacity: 0; }
-  to   { transform: rotate(-1.5deg) scale(1);    opacity: 1; }
-}
-
-.polaroid-img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  background: linear-gradient(145deg, #c8b49e 0%, #d9c8ae 40%, #b8a48c 100%);
-  border-radius: 2px;
+  height: 100dvh;
   position: relative;
   overflow: hidden;
+  background: linear-gradient(145deg, #c8b49e 0%, #d9c8ae 40%, #b8a48c 100%);
 }
 
-.ayo-photo {
+.start-photo {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -96,46 +78,23 @@ body {
   object-fit: cover;
 }
 
-/* Gnistor / sparkles */
-
-.start-sparkle {
-  position: absolute;
-  color: #ff9500;
-  user-select: none;
-  text-shadow: 0 0 10px rgba(255,149,0,0.5);
-  animation: sparkleSpin 3s ease-in-out infinite;
-  line-height: 1;
-}
-
-.s1 { top: 10%; left: 7%;  font-size: 3.5rem; animation-delay: 0s;    }
-.s2 { top: 8%;  right: 9%; font-size: 2rem;   animation-delay: 0.4s;  }
-.s3 { top: 28%; right: 5%; font-size: 1.5rem; animation-delay: 0.85s; }
-
-@keyframes sparkleSpin {
-  0%,100% { transform: scale(1)    rotate(0deg); }
-  33%      { transform: scale(1.18) rotate(18deg); }
-  66%      { transform: scale(0.9)  rotate(-12deg); }
-}
-
-/* Titelöverlagring */
-
 .start-overlay {
   position: absolute;
-  bottom: 12%;
+  bottom: 15%;
   left: 0;
   right: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 1.2rem;
 }
 
 .start-title {
   font-family: var(--font-display);
-  font-size: clamp(3rem, 14vw, 5.5rem);
+  font-size: clamp(3.5rem, 16vw, 6rem);
   line-height: 1;
   white-space: nowrap;
-  filter: drop-shadow(0 3px 10px rgba(0,0,0,0.35));
+  filter: drop-shadow(0 3px 12px rgba(0,0,0,0.45));
 }
 
 .c1 { color: #74c0fc; }
@@ -164,7 +123,7 @@ body {
 .btn-play:active { transform: translateY(4px);  box-shadow: 0 1px 0 #2b8a3e; }
 
 /* ===========================
-   FÖRÄLDRASKÄRM
+   FORALDRASKARM
    =========================== */
 
 #parent-screen {
@@ -201,19 +160,6 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
-}
-
-.header-star {
-  font-size: 2.5rem;
-  color: #9775fa;
-  line-height: 1;
-  display: block;
-  animation: starPulse 3s ease-in-out infinite;
-}
-
-@keyframes starPulse {
-  0%,100% { transform: scale(1); }
-  50%      { transform: scale(1.12) rotate(15deg); }
 }
 
 .parent-h2 {
@@ -283,9 +229,10 @@ body {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 1.25rem;
+  font-size: 1rem;
+  font-weight: 800;
   color: #ced4da;
-  padding: 0.3rem 0.4rem;
+  padding: 0.3rem 0.6rem;
   line-height: 1;
   border-radius: 8px;
   transition: color 0.15s, transform 0.15s, background 0.15s;
@@ -305,7 +252,7 @@ body {
   padding: 0.95rem 2.8rem;
   border: none;
   border-radius: 999px;
-  background: linear-gradient(135deg, #9775fa, #cc5de8);
+  background: #9775fa;
   color: #fff;
   cursor: pointer;
   box-shadow: 0 6px 0 #5f3dc4, 0 10px 32px rgba(151,117,250,0.4);
@@ -324,7 +271,7 @@ body {
 .btn-start-session:active { transform: translateY(3px);  box-shadow: 0 3px 0 #5f3dc4; }
 
 /* ===========================
-   SPELSKÄRM
+   SPELSKARM
    =========================== */
 
 #game-screen {
@@ -345,7 +292,7 @@ body {
 
 .btn-back {
   font-family: var(--font-body);
-  font-size: 1.1rem;
+  font-size: 0.85rem;
   font-weight: 800;
   background: rgba(0,0,0,0.07);
   border: none;
@@ -380,7 +327,7 @@ body {
 #progress-fill {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, #9775fa, #cc5de8);
+  background: #9775fa;
   border-radius: 999px;
   transition: width 0.45s cubic-bezier(0.34,1.56,0.64,1);
 }
@@ -416,6 +363,7 @@ body {
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   transition: background 0.25s, border-color 0.25s, color 0.25s, box-shadow 0.25s;
   user-select: none;
+  text-transform: uppercase;
 }
 
 .letter-box.current {
@@ -431,6 +379,7 @@ body {
   border-color: transparent !important;
   box-shadow: 0 5px 20px rgba(0,0,0,0.16);
   animation: pop 0.4s cubic-bezier(0.68,-0.55,0.27,1.55);
+  text-transform: uppercase;
 }
 
 .letter-box.shake { animation: shake 0.45s ease !important; border-color: #ff6b6b !important; }
@@ -532,7 +481,7 @@ body {
 }
 
 /* ===========================
-   ORD KLARAT — STJÄRNSKÄRM
+   ORD KLARAT
    =========================== */
 
 #word-done-screen {
@@ -541,7 +490,9 @@ body {
 }
 
 .big-star {
-  font-size: 8rem;
+  font-family: var(--font-display);
+  font-size: 5rem;
+  color: #ffd43b;
   line-height: 1;
   display: block;
   animation: starBounceIn 0.65s cubic-bezier(0.68,-0.55,0.27,1.55) both;
@@ -559,26 +510,17 @@ body {
   font-size: clamp(2rem, 9vw, 3.2rem);
   color: var(--dark);
   letter-spacing: 5px;
+  text-transform: uppercase;
   animation: fadeUp 0.4s ease 0.35s both;
 }
 
 /* ===========================
-   FINAL — GRATTIS-SKÄRM
+   FINAL — GRATTIS-SKARM
    =========================== */
 
 #final-screen {
   background: var(--cream);
   gap: 1.1rem;
-}
-
-.final-trophy {
-  font-size: 4rem;
-  animation: floatBob 2.5s ease-in-out infinite;
-}
-
-@keyframes floatBob {
-  0%,100% { transform: translateY(0) rotate(0deg); }
-  50%      { transform: translateY(-10px) rotate(4deg); }
 }
 
 .cat-frame {
@@ -602,8 +544,9 @@ body {
 .cat-gif { width: 100%; height: 100%; object-fit: cover; }
 
 .cat-fallback {
-  font-size: 5rem;
-  animation: floatBob 1.5s ease-in-out infinite;
+  font-family: var(--font-display);
+  font-size: 3rem;
+  color: var(--dark);
 }
 
 .grattis {
@@ -626,7 +569,7 @@ body {
   padding: 0.9rem 2.2rem;
   border: none;
   border-radius: 999px;
-  background: linear-gradient(135deg, #9775fa, #cc5de8);
+  background: #9775fa;
   color: #fff;
   cursor: pointer;
   box-shadow: 0 6px 0 #5f3dc4;
@@ -663,7 +606,6 @@ body {
   width: 5px !important;
 }
 
-/* Burstexplosion från mitten */
 @keyframes confettiBurst {
   0% {
     transform: translate(-50%, -50%) rotate(0deg) scale(0);
@@ -676,7 +618,6 @@ body {
   }
 }
 
-/* Fallande konfetti (final) */
 @keyframes confettiFall {
   0%   { top: -24px;  transform: rotate(0deg) translateX(0);    opacity: 1; }
   85%  {              transform: rotate(540deg) translateX(28px); opacity: 1; }
@@ -711,14 +652,13 @@ body {
   .kb-row  { gap: 0.17rem; }
   #keyboard { gap: 0.2rem; }
   .letter-box { width: 46px; height: 46px; font-size: 1.32rem; }
-  .polaroid { padding: 10px 10px 50px; }
-  .start-title { font-size: clamp(2.6rem, 13vw, 4.2rem); }
-  .big-star { font-size: 6rem; }
+  .start-title { font-size: clamp(3rem, 14vw, 5rem); }
+  .big-star { font-size: 4rem; }
 }
 
 @media (max-height: 680px) {
   #game-screen  { gap: 0.4rem; padding-top: 0.5rem; }
   #word-display { min-height: 60px; padding: 0.3rem; }
   #keyboard     { gap: 0.2rem; padding-bottom: 0.5rem; }
-  .big-star     { font-size: 5rem; }
+  .big-star     { font-size: 3.5rem; }
 }
