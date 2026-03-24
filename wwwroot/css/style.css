@@ -1,5 +1,5 @@
 /* ===========================
-   AYO ABC — Stilmall
+   AYO ABC — Stilmall (Elevated)
    =========================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@600;700;800;900&display=swap');
@@ -12,26 +12,27 @@
 }
 
 :root {
+  --cream: #faf8f3;
+  --dark:  #16153a;
   --radius-box: 18px;
-  --radius-key: 14px;
+  --radius-key: 12px;
   --font-display: 'Fredoka One', cursive;
-  --font-body: 'Nunito', sans-serif;
+  --font-body:    'Nunito', sans-serif;
 }
 
 html, body {
   height: 100%;
   overflow-x: hidden;
+  background: var(--cream);
 }
 
 body {
   font-family: var(--font-body);
-  background: linear-gradient(160deg, #fff0f6 0%, #f0f4ff 45%, #edfcf1 100%);
-  background-attachment: fixed;
   min-height: 100vh;
 }
 
 /* ===========================
-   SCREENS
+   SKÄRMAR
    =========================== */
 
 .screen {
@@ -40,117 +41,295 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1.25rem;
-  animation: fadeUp 0.35s ease;
+  padding: 1.5rem;
 }
 
-.screen.active { display: flex; }
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
+.screen.active {
+  display: flex;
+  animation: screenIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
+
+@keyframes screenIn {
+  from { opacity: 0; transform: scale(0.96) translateY(10px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+
+/* ===========================
+   STARTSKÄRM
+   =========================== */
+
+#start-screen {
+  background: var(--cream);
+  padding: 2rem 1.5rem;
+}
+
+.polaroid {
+  background: #fff;
+  padding: 14px 14px 64px;
+  border-radius: 3px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 16px 60px rgba(0,0,0,0.22), 0 3px 10px rgba(0,0,0,0.1);
+  transform: rotate(-1.5deg);
+  animation: polaroidIn 0.65s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+@keyframes polaroidIn {
+  from { transform: rotate(-1.5deg) scale(0.82); opacity: 0; }
+  to   { transform: rotate(-1.5deg) scale(1);    opacity: 1; }
+}
+
+.polaroid-img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(145deg, #c8b49e 0%, #d9c8ae 40%, #b8a48c 100%);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ayo-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Gnistor / sparkles */
+
+.start-sparkle {
+  position: absolute;
+  color: #ff9500;
+  user-select: none;
+  text-shadow: 0 0 10px rgba(255,149,0,0.5);
+  animation: sparkleSpin 3s ease-in-out infinite;
+  line-height: 1;
+}
+
+.s1 { top: 10%; left: 7%;  font-size: 3.5rem; animation-delay: 0s;    }
+.s2 { top: 8%;  right: 9%; font-size: 2rem;   animation-delay: 0.4s;  }
+.s3 { top: 28%; right: 5%; font-size: 1.5rem; animation-delay: 0.85s; }
+
+@keyframes sparkleSpin {
+  0%,100% { transform: scale(1)    rotate(0deg); }
+  33%      { transform: scale(1.18) rotate(18deg); }
+  66%      { transform: scale(0.9)  rotate(-12deg); }
+}
+
+/* Titelöverlagring */
+
+.start-overlay {
+  position: absolute;
+  bottom: 12%;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.start-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 14vw, 5.5rem);
+  line-height: 1;
+  white-space: nowrap;
+  filter: drop-shadow(0 3px 10px rgba(0,0,0,0.35));
+}
+
+.c1 { color: #74c0fc; }
+.c2 { color: #cc5de8; }
+.c3 { color: #51cf66; }
+.c4 { color: #ffd43b; }
+.c5 { color: #ff6b6b; }
+.c6 { color: #da77f2; }
+
+.btn-play {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+  padding: 0.7rem 3rem;
+  background: #37b24d;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 5px 0 #2b8a3e, 0 8px 26px rgba(55,178,77,0.45);
+  transition: transform 0.12s, box-shadow 0.12s;
+  user-select: none;
+}
+
+.btn-play:hover  { transform: translateY(-3px); box-shadow: 0 8px 0 #2b8a3e, 0 14px 32px rgba(55,178,77,0.45); }
+.btn-play:active { transform: translateY(4px);  box-shadow: 0 1px 0 #2b8a3e; }
 
 /* ===========================
    FÖRÄLDRASKÄRM
    =========================== */
 
-#parent-screen { gap: 1.2rem; text-align: center; }
-
-.hero-emoji {
-  font-size: 4.5rem;
-  animation: float 3s ease-in-out infinite;
+#parent-screen {
+  background: var(--cream);
+  justify-content: flex-start;
+  padding-top: 2.5rem;
+  gap: 0;
 }
 
-@keyframes float {
-  0%,100% { transform: translateY(0); }
-  50%      { transform: translateY(-12px); }
-}
-
-.logo-title {
-  font-family: var(--font-display);
-  font-size: clamp(3rem, 12vw, 5.5rem);
-  line-height: 1;
-  background: linear-gradient(135deg, #ff6b6b 0%, #cc5de8 50%, #4d96ff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.tagline {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #adb5bd;
-}
-
-.input-card {
-  background: #fff;
-  border-radius: 28px;
-  padding: 2rem 1.75rem;
-  box-shadow: 0 10px 50px rgba(0,0,0,0.10);
+.parent-wrap {
   width: 100%;
-  max-width: 440px;
+  max-width: 560px;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.4rem;
 }
 
-.input-label {
-  font-size: 0.78rem;
-  font-weight: 900;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
+.btn-home {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 800;
   color: #adb5bd;
-  text-align: left;
-}
-
-#parent-input {
-  font-family: var(--font-display);
-  font-size: 2.2rem;
-  letter-spacing: 6px;
-  text-align: center;
-  text-transform: uppercase;
-  width: 100%;
-  padding: 0.65rem 1rem;
-  border: 3px solid #e9ecef;
-  border-radius: 16px;
-  background: #f8f9fa;
-  color: #212529;
-  outline: none;
-  transition: border-color 0.2s, background 0.2s;
-}
-
-#parent-input:focus {
-  border-color: #9775fa;
-  background: #fff;
-}
-
-#parent-input.shake { animation: shake 0.45s ease; border-color: #ff6b6b; }
-
-.btn-start {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  letter-spacing: 1px;
-  padding: 0.85rem 2rem;
+  background: none;
   border: none;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #ff6b6b, #cc5de8);
+  cursor: pointer;
+  padding: 0;
+  align-self: flex-start;
+  transition: color 0.15s;
+}
+
+.btn-home:hover { color: #495057; }
+
+.parent-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.header-star {
+  font-size: 2.5rem;
+  color: #9775fa;
+  line-height: 1;
+  display: block;
+  animation: starPulse 3s ease-in-out infinite;
+}
+
+@keyframes starPulse {
+  0%,100% { transform: scale(1); }
+  50%      { transform: scale(1.12) rotate(15deg); }
+}
+
+.parent-h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 10vw, 4rem);
+  color: var(--dark);
+  line-height: 1.05;
+}
+
+.parent-sub {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 5vw, 2rem);
+  color: var(--dark);
+  line-height: 1.3;
+}
+
+/* Ordinmatning */
+
+#word-input {
+  font-family: var(--font-body);
+  font-size: 1.3rem;
+  font-weight: 700;
+  width: 100%;
+  padding: 1rem 1.6rem;
+  border: 2.5px solid var(--dark);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--dark);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#word-input:focus {
+  border-color: #9775fa;
+  box-shadow: 0 0 0 4px rgba(151,117,250,0.18);
+}
+
+#word-input::placeholder { color: #b8c0cc; font-weight: 600; }
+
+#word-input.shake { animation: shake 0.45s ease; border-color: #ff6b6b; }
+
+/* Ordlista */
+
+.word-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0 0.4rem;
+}
+
+.word-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  animation: fadeUp 0.22s ease both;
+}
+
+.word-item-text {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  color: var(--dark);
+  letter-spacing: 1px;
+}
+
+.btn-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.25rem;
+  color: #ced4da;
+  padding: 0.3rem 0.4rem;
+  line-height: 1;
+  border-radius: 8px;
+  transition: color 0.15s, transform 0.15s, background 0.15s;
+}
+
+.btn-delete:hover {
+  color: #ff6b6b;
+  background: rgba(255,107,107,0.1);
+  transform: scale(1.15);
+}
+
+/* Startknapp */
+
+.btn-start-session {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  padding: 0.95rem 2.8rem;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #9775fa, #cc5de8);
   color: #fff;
   cursor: pointer;
-  box-shadow: 0 6px 0 #862e9c;
+  box-shadow: 0 6px 0 #5f3dc4, 0 10px 32px rgba(151,117,250,0.4);
   transition: transform 0.12s, box-shadow 0.12s;
+  align-self: center;
   user-select: none;
+  display: none;
 }
 
-.btn-start:hover  { transform: translateY(-3px); box-shadow: 0 9px 0 #862e9c; }
-.btn-start:active { transform: translateY(3px);  box-shadow: 0 3px 0 #862e9c; }
+.btn-start-session.visible {
+  display: block;
+  animation: fadeUp 0.3s ease both;
+}
+
+.btn-start-session:hover  { transform: translateY(-3px); box-shadow: 0 9px 0 #5f3dc4, 0 16px 36px rgba(151,117,250,0.45); }
+.btn-start-session:active { transform: translateY(3px);  box-shadow: 0 3px 0 #5f3dc4; }
 
 /* ===========================
    SPELSKÄRM
    =========================== */
 
 #game-screen {
-  gap: 1rem;
+  background: var(--cream);
+  gap: 0.8rem;
   justify-content: flex-start;
   padding-top: 1rem;
 }
@@ -160,7 +339,8 @@ body {
   max-width: 720px;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.7rem;
+  padding: 0 0.5rem;
 }
 
 .btn-back {
@@ -177,11 +357,21 @@ body {
   transition: background 0.2s, color 0.2s;
 }
 
-.btn-back:hover { background: rgba(0,0,0,0.13); color: #495057; }
+.btn-back:hover { background: rgba(0,0,0,0.13); color: #343a40; }
+
+.word-counter {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #adb5bd;
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.5px;
+}
 
 .progress-track {
   flex: 1;
-  height: 12px;
+  height: 10px;
   background: rgba(0,0,0,0.07);
   border-radius: 999px;
   overflow: hidden;
@@ -190,26 +380,26 @@ body {
 #progress-fill {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, #69db7c, #4dabf7);
+  background: linear-gradient(90deg, #9775fa, #cc5de8);
   border-radius: 999px;
   transition: width 0.45s cubic-bezier(0.34,1.56,0.64,1);
 }
 
-/* --- Ordvisning --- */
+/* Ordvisning */
 
 #word-display {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.5rem 1rem;
-  min-height: 90px;
+  gap: 0.4rem;
+  padding: 0.6rem 1rem;
+  min-height: 88px;
   max-width: 720px;
   width: 100%;
 }
 
-.word-spacer { width: 18px; }
+.word-spacer { width: 16px; }
 
 .letter-box {
   width:  clamp(52px, 9vw, 74px);
@@ -222,35 +412,28 @@ body {
   font-size: clamp(1.5rem, 4.5vw, 2.2rem);
   background: #fff;
   border: 3px solid #e9ecef;
-  color: rgba(0,0,0,0.13);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  color: rgba(0,0,0,0.14);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   transition: background 0.25s, border-color 0.25s, color 0.25s, box-shadow 0.25s;
   user-select: none;
-  position: relative;
 }
 
-/* Bokstav "vagt" synlig = standard (ghost) */
-.letter-box { color: rgba(0,0,0,0.18); }
-
-/* Den bokstav som ska tryckas näst */
 .letter-box.current {
   border-color: #9775fa;
-  color: rgba(100,60,200,0.30);
+  color: rgba(100,60,200,0.25);
   background: rgba(151,117,250,0.06);
-  box-shadow: 0 0 0 4px rgba(151,117,250,0.18), 0 4px 14px rgba(0,0,0,0.08);
-  animation: pulse 1.3s ease-in-out infinite;
+  box-shadow: 0 0 0 4px rgba(151,117,250,0.2), 0 4px 16px rgba(0,0,0,0.06);
+  animation: pulse 1.4s ease-in-out infinite;
 }
 
-/* Korrekt ifylld bokstav */
 .letter-box.filled {
   color: #fff !important;
   border-color: transparent !important;
-  box-shadow: 0 5px 18px rgba(0,0,0,0.18);
-  animation: pop 0.38s cubic-bezier(0.68,-0.55,0.27,1.55);
+  box-shadow: 0 5px 20px rgba(0,0,0,0.16);
+  animation: pop 0.4s cubic-bezier(0.68,-0.55,0.27,1.55);
 }
 
-/* Felaktigt knapptryck */
-.letter-box.wrong { animation: shake 0.45s ease !important; border-color: #ff6b6b !important; }
+.letter-box.shake { animation: shake 0.45s ease !important; border-color: #ff6b6b !important; }
 
 @keyframes pulse {
   0%,100% { transform: scale(1); }
@@ -259,7 +442,7 @@ body {
 
 @keyframes pop {
   0%   { transform: scale(1); }
-  55%  { transform: scale(1.38); }
+  50%  { transform: scale(1.42); }
   100% { transform: scale(1); }
 }
 
@@ -271,14 +454,14 @@ body {
   80%     { transform: translateX(5px); }
 }
 
-/* --- Tangentbord --- */
+/* Tangentbord */
 
 #keyboard {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.45rem;
   align-items: center;
-  padding-bottom: 1rem;
+  padding-bottom: 1.5rem;
 }
 
 .kb-row {
@@ -288,124 +471,172 @@ body {
 }
 
 .key {
-  width:  clamp(38px, 7.5vw, 62px);
-  height: clamp(44px, 8.5vw, 66px);
+  width:  clamp(36px, 7.5vw, 60px);
+  height: clamp(44px, 9vw,   66px);
   border: none;
   border-radius: var(--radius-key);
   font-family: var(--font-display);
-  font-size: clamp(1rem, 3vw, 1.55rem);
+  font-size: clamp(0.95rem, 3vw, 1.5rem);
   color: #fff;
   cursor: pointer;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.22);
-  transition: transform 0.1s, filter 0.15s;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.22);
+  transition: transform 0.1s, filter 0.15s, box-shadow 0.2s;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
 }
 
-.key:hover  { transform: translateY(-3px); filter: brightness(1.12); }
-.key.pressed,
-.key:active { transform: translateY(4px) !important; box-shadow: none !important; filter: brightness(0.9); }
+.key:hover  { transform: translateY(-3px); filter: brightness(1.1); }
 
-/* Hint: tangenten för rätt bokstav lyser upp */
+.key.pressed,
+.key:active {
+  transform: translateY(5px) !important;
+  filter: brightness(0.85) !important;
+  box-shadow: none !important;
+}
+
+/* Tangentljusen */
+
 .key.hint {
-  animation: keyPulse 1s ease-in-out infinite;
+  animation: keyGlow 1.1s ease-in-out infinite;
 }
 
 .key.hint-strong {
-  animation: keyPulseStrong 0.65s ease-in-out infinite;
-  transform: scale(1.12);
+  animation: keyGlowStrong 0.65s ease-in-out infinite;
 }
 
-@keyframes keyPulse {
-  0%,100% { filter: brightness(1); }
-  50%      { filter: brightness(1.35) saturate(1.4); }
+@keyframes keyGlow {
+  0%,100% {
+    filter: brightness(1);
+    box-shadow: var(--key-shadow, 0 5px 0 rgba(0,0,0,0.3));
+  }
+  50% {
+    filter: brightness(1.3) saturate(1.2);
+    box-shadow: var(--key-shadow, 0 5px 0 rgba(0,0,0,0.3)),
+                0 0 20px 6px rgba(255,255,255,0.6);
+  }
 }
 
-@keyframes keyPulseStrong {
-  0%,100% { filter: brightness(1); }
-  50%      { filter: brightness(1.6) saturate(1.6) drop-shadow(0 0 6px rgba(255,255,255,0.7)); }
+@keyframes keyGlowStrong {
+  0%,100% {
+    filter: brightness(1);
+    transform: scale(1);
+    box-shadow: var(--key-shadow, 0 5px 0 rgba(0,0,0,0.3));
+  }
+  50% {
+    filter: brightness(1.55) saturate(1.5);
+    transform: scale(1.16);
+    box-shadow: var(--key-shadow, 0 5px 0 rgba(0,0,0,0.3)),
+                0 0 30px 12px rgba(255,255,255,0.75);
+  }
 }
 
 /* ===========================
-   FIRANDESKÄRM
+   ORD KLARAT — STJÄRNSKÄRM
    =========================== */
 
-#celebration-screen {
-  justify-content: center;
+#word-done-screen {
+  background: var(--cream);
+  gap: 1.5rem;
 }
 
-.celebration-box {
-  background: #fff;
-  border-radius: 32px;
-  padding: 2.5rem 2rem;
-  max-width: 500px;
-  width: 100%;
-  text-align: center;
-  box-shadow: 0 20px 70px rgba(0,0,0,0.13);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  animation: bounceIn 0.55s cubic-bezier(0.68,-0.55,0.27,1.55);
+.big-star {
+  font-size: 8rem;
+  line-height: 1;
+  display: block;
+  animation: starBounceIn 0.65s cubic-bezier(0.68,-0.55,0.27,1.55) both;
 }
 
-@keyframes bounceIn {
-  0%   { transform: scale(0.4); opacity: 0; }
-  100% { transform: scale(1);   opacity: 1; }
+@keyframes starBounceIn {
+  0%   { transform: scale(0) rotate(-30deg); opacity: 0; }
+  60%  { transform: scale(1.28) rotate(10deg); opacity: 1; }
+  80%  { transform: scale(0.9) rotate(-5deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
 }
 
-.celebration-stars {
-  font-size: 2.2rem;
-  animation: starPop 0.6s cubic-bezier(0.68,-0.55,0.27,1.55);
-}
-
-@keyframes starPop {
-  0%   { transform: scale(0) rotate(-180deg); }
-  100% { transform: scale(1) rotate(0); }
-}
-
-.celebration-heading {
+.done-word-label {
   font-family: var(--font-display);
-  font-size: clamp(2.2rem, 9vw, 3.5rem);
-  background: linear-gradient(135deg, #ff6b6b, #ffd43b, #69db7c);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.celebration-word {
-  font-family: var(--font-display);
-  font-size: clamp(1.6rem, 6vw, 2.6rem);
+  font-size: clamp(2rem, 9vw, 3.2rem);
+  color: var(--dark);
   letter-spacing: 5px;
-  padding: 0.9rem 1.5rem;
-  background: #f8f9fa;
-  border-radius: 16px;
-  color: #343a40;
-  word-break: break-all;
+  animation: fadeUp 0.4s ease 0.35s both;
 }
 
-.celebration-trophy {
-  font-size: 3.5rem;
-  animation: float 2s ease-in-out infinite;
+/* ===========================
+   FINAL — GRATTIS-SKÄRM
+   =========================== */
+
+#final-screen {
+  background: var(--cream);
+  gap: 1.1rem;
+}
+
+.final-trophy {
+  font-size: 4rem;
+  animation: floatBob 2.5s ease-in-out infinite;
+}
+
+@keyframes floatBob {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-10px) rotate(4deg); }
+}
+
+.cat-frame {
+  width: clamp(180px, 55vw, 280px);
+  height: clamp(180px, 55vw, 280px);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.16);
+  background: #e8e3d8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: frameIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.15s both;
+}
+
+@keyframes frameIn {
+  from { transform: scale(0.7) rotate(-5deg); opacity: 0; }
+  to   { transform: scale(1)   rotate(0deg);  opacity: 1; }
+}
+
+.cat-gif { width: 100%; height: 100%; object-fit: cover; }
+
+.cat-fallback {
+  font-size: 5rem;
+  animation: floatBob 1.5s ease-in-out infinite;
+}
+
+.grattis {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 11vw, 5rem);
+  color: #74c0fc;
+  letter-spacing: 3px;
+  animation: grattisPop 0.6s cubic-bezier(0.68,-0.55,0.27,1.55) 0.3s both;
+}
+
+@keyframes grattisPop {
+  0%   { transform: scale(0) rotate(-8deg); opacity: 0; }
+  65%  { transform: scale(1.12) rotate(2deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
 }
 
 .btn-again {
   font-family: var(--font-display);
   font-size: 1.4rem;
-  padding: 0.85rem 2rem;
+  padding: 0.9rem 2.2rem;
   border: none;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #69db7c, #4dabf7);
+  border-radius: 999px;
+  background: linear-gradient(135deg, #9775fa, #cc5de8);
   color: #fff;
   cursor: pointer;
-  box-shadow: 0 6px 0 #1c7f3d;
+  box-shadow: 0 6px 0 #5f3dc4;
   transition: transform 0.12s, box-shadow 0.12s;
   user-select: none;
+  animation: fadeUp 0.4s ease 0.6s both;
 }
 
-.btn-again:hover  { transform: translateY(-3px); box-shadow: 0 9px 0 #1c7f3d; }
-.btn-again:active { transform: translateY(3px);  box-shadow: 0 3px 0 #1c7f3d; }
+.btn-again:hover  { transform: translateY(-3px); box-shadow: 0 9px 0 #5f3dc4; }
+.btn-again:active { transform: translateY(3px);  box-shadow: 0 3px 0 #5f3dc4; }
 
 /* ===========================
    KONFETTI
@@ -413,11 +644,9 @@ body {
 
 .confetti {
   position: fixed;
-  top: -20px;
   pointer-events: none;
   z-index: 9999;
-  animation: confettiFall linear forwards;
-  will-change: transform, top;
+  will-change: transform, opacity;
 }
 
 .confetti.round  { border-radius: 50%; }
@@ -429,11 +658,43 @@ body {
     2%  35%, 39% 35%
   );
 }
+.confetti.ribbon {
+  border-radius: 2px;
+  width: 5px !important;
+}
 
+/* Burstexplosion från mitten */
+@keyframes confettiBurst {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg) scale(0);
+    opacity: 1;
+  }
+  60% { opacity: 1; }
+  100% {
+    transform: translate(calc(-50% + var(--bx)), calc(-50% + var(--by))) rotate(var(--brot)) scale(0.6);
+    opacity: 0;
+  }
+}
+
+/* Fallande konfetti (final) */
 @keyframes confettiFall {
-  0%   { top: -20px;  transform: rotate(0deg) translateX(0);    opacity: 1; }
-  85%  {             transform: rotate(540deg) translateX(30px); opacity: 1; }
-  100% { top: 110vh; transform: rotate(720deg) translateX(50px); opacity: 0; }
+  0%   { top: -24px;  transform: rotate(0deg) translateX(0);    opacity: 1; }
+  85%  {              transform: rotate(540deg) translateX(28px); opacity: 1; }
+  100% { top: 110vh; transform: rotate(720deg) translateX(48px); opacity: 0; }
+}
+
+.confetti.falling {
+  top: -24px;
+  animation: confettiFall linear forwards;
+}
+
+/* ===========================
+   DELADE ANIMATIONER
+   =========================== */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ===========================
@@ -442,17 +703,22 @@ body {
 
 @media (max-width: 480px) {
   .key {
-    width: 31px;
-    height: 38px;
-    font-size: 0.88rem;
-    border-radius: 8px;
+    width: 29px;
+    height: 37px;
+    font-size: 0.82rem;
+    border-radius: 7px;
   }
-  .kb-row { gap: 0.2rem; }
-  #keyboard { gap: 0.25rem; }
-  .letter-box { width: 48px; height: 48px; font-size: 1.4rem; }
+  .kb-row  { gap: 0.17rem; }
+  #keyboard { gap: 0.2rem; }
+  .letter-box { width: 46px; height: 46px; font-size: 1.32rem; }
+  .polaroid { padding: 10px 10px 50px; }
+  .start-title { font-size: clamp(2.6rem, 13vw, 4.2rem); }
+  .big-star { font-size: 6rem; }
 }
 
 @media (max-height: 680px) {
-  #game-screen { gap: 0.5rem; padding-top: 0.5rem; }
-  #word-display { min-height: 60px; }
+  #game-screen  { gap: 0.4rem; padding-top: 0.5rem; }
+  #word-display { min-height: 60px; padding: 0.3rem; }
+  #keyboard     { gap: 0.2rem; padding-bottom: 0.5rem; }
+  .big-star     { font-size: 5rem; }
 }

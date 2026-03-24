@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>AYO ABC 🌈</title>
+  <title>AYO ABC</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
@@ -11,52 +11,77 @@
 </head>
 <body>
 
-  <!-- 👨‍👧 Förälderskonfigurering -->
-  <div id="parent-screen" class="screen">
-    <div class="hero-emoji">🌈</div>
-    <h1 class="logo-title">AYO ABC</h1>
-    <p class="tagline">Skriv ett ord så får barnet öva!</p>
+  <!-- 🏠 Startskärm -->
+  <div id="start-screen" class="screen active">
+    <div class="polaroid">
+      <div class="polaroid-img">
+        <!-- Lägg till wwwroot/images/ayo.jpg för att visa foto -->
+        <img src="/images/ayo.jpg" alt="Ayo" class="ayo-photo" onerror="this.style.display='none'">
+        <div class="start-sparkle s1">✦</div>
+        <div class="start-sparkle s2">✦</div>
+        <div class="start-sparkle s3">✦</div>
+        <div class="start-overlay">
+          <h1 class="start-title">
+            <span class="c1">A</span><span class="c2">y</span><span class="c3">o</span><span class="c4">A</span><span class="c5">B</span><span class="c6">C</span>
+          </h1>
+          <button class="btn-play" onclick="showParentScreen()">SPELA</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <div class="input-card">
-      <label class="input-label" for="parent-input">Ord eller mening</label>
+  <!-- 👨‍👧 Föräldraskärm -->
+  <div id="parent-screen" class="screen">
+    <div class="parent-wrap">
+      <button class="btn-home" onclick="showScreen('start-screen')">← Hem</button>
+      <div class="parent-header">
+        <span class="header-star">✳</span>
+        <h2 class="parent-h2">Hej förälder!</h2>
+        <p class="parent-sub">lista ord för barnet att öva:</p>
+      </div>
       <input
-        id="parent-input"
+        id="word-input"
         type="text"
-        placeholder="T.ex. EMMA"
+        placeholder="skriv ett ord, tryck enter..."
         maxlength="30"
         autocomplete="off"
         autocorrect="off"
         autocapitalize="characters"
         spellcheck="false"
       >
-      <button class="btn-start" onclick="startGame()">
-        🚀 Starta!
+      <ul id="word-list" class="word-list"></ul>
+      <button class="btn-start-session" id="btn-starta" onclick="startSession()">
+        Starta →
       </button>
     </div>
   </div>
 
-  <!-- 🎮 Spelplan -->
+  <!-- 🎮 Spelskärm -->
   <div id="game-screen" class="screen">
     <div class="game-top">
       <button class="btn-back" onclick="showParentScreen()">←</button>
+      <span class="word-counter" id="word-counter"></span>
       <div class="progress-track"><div id="progress-fill"></div></div>
     </div>
-
     <div id="word-display"></div>
     <div id="keyboard"></div>
   </div>
 
-  <!-- 🎉 Firande -->
-  <div id="celebration-screen" class="screen">
-    <div class="celebration-box">
-      <div class="celebration-stars">⭐ ⭐ ⭐</div>
-      <h2 class="celebration-heading">BRA JOBBAT!</h2>
-      <div id="celebration-word" class="celebration-word"></div>
-      <div class="celebration-trophy">🏆</div>
-      <button class="btn-again" onclick="showParentScreen()">
-        🎮 Spela igen!
-      </button>
+  <!-- ⭐ Ord klarat -->
+  <div id="word-done-screen" class="screen">
+    <div class="big-star">⭐</div>
+    <p class="done-word-label" id="done-word-label"></p>
+  </div>
+
+  <!-- 🎉 Alla ord klara! -->
+  <div id="final-screen" class="screen">
+    <div class="final-trophy">🏆</div>
+    <div class="cat-frame">
+      <!-- Lägg till wwwroot/images/cat.gif för dansande katt -->
+      <img src="/images/cat.gif" alt="Dansande katt" class="cat-gif" onerror="handleCatError(this)">
     </div>
+    <div class="grattis">GRATTIS!!</div>
+    <button class="btn-again" onclick="showScreen('start-screen')">🎮 Spela igen!</button>
   </div>
 
   <script src="/js/app.js"></script>

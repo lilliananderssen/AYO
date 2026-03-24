@@ -4,6 +4,11 @@
 
 'use strict';
 
+// --- Ordlista (föräldern fyller i) ---
+
+let words = [];
+let currentWordIndex = 0;
+
 // --- Spelställning ---
 
 const state = {
@@ -22,40 +27,86 @@ const KEYBOARD_ROWS = [
   ['Z','X','C','V','B','N','M'],
 ];
 
-// Regnbågsfärger för tangenterna
 const KEY_COLORS = [
   '#FF6B6B','#FF8C42','#FFC914','#A9E34B','#69DB7C',
   '#38D9A9','#4DABF7','#748FFC','#9775FA','#DA77F2',
   '#FF6B9D','#FF8C42',
 ];
 
+const CONFETTI_COLORS = [
+  '#FF6B6B','#FFD43B','#69DB7C','#4DABF7',
+  '#FF8C42','#CC5DE8','#F06595','#74C0FC',
+];
+const CONFETTI_SHAPES = ['round','square','star','ribbon'];
+
 // --- Skärmhantering ---
 
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  const screen = document.getElementById(id);
+  void screen.offsetWidth; // starta om animationen
+  screen.classList.add('active');
 }
 
 function showParentScreen() {
   showScreen('parent-screen');
-  const inp = document.getElementById('parent-input');
-  inp.value = '';
-  setTimeout(() => inp.focus(), 80);
+  setTimeout(() => document.getElementById('word-input').focus(), 80);
 }
 
-// --- Starta spelet ---
+// --- Föräldraskärm: lägg till / ta bort ord ---
 
-function startGame() {
-  const raw = document.getElementById('parent-input').value.trim().toUpperCase();
-  if (!raw) {
-    triggerShake(document.getElementById('parent-input'));
+function addWord() {
+  const input = document.getElementById('word-input');
+  const w = input.value.trim().toUpperCase();
+  if (!w) {
+    triggerShake(input);
     return;
   }
+  words.push(w);
+  input.value = '';
+  input.focus();
+  renderWordList();
+}
 
-  state.targetText     = raw;
+function removeWord(index) {
+  words.splice(index, 1);
+  renderWordList();
+}
+
+function renderWordList() {
+  const list = document.getElementById('word-list');
+  list.innerHTML = '';
+
+  words.forEach((w, i) => {
+    const li = document.createElement('li');
+    li.className = 'word-item';
+    li.innerHTML = `
+      <span class="word-item-text">${w}</span>
+      <button class="btn-delete" onclick="removeWord(${i})" aria-label="Ta bort ${w}">🗑</button>
+    `;
+    list.appendChild(li);
+  });
+
+  // Visa/dölj startknapp
+  const btn = document.getElementById('btn-starta');
+  btn.classList.toggle('visible', words.length > 0);
+}
+
+// --- Starta spelomgång ---
+
+function startSession() {
+  if (words.length === 0) return;
+  currentWordIndex = 0;
+  loadWord(currentWordIndex);
+}
+
+function loadWord(index) {
+  const word = words[index];
+
+  state.targetText     = word;
   state.currentIndex   = 0;
   state.wrongAttempts  = 0;
-  state.totalLetters   = [...raw].filter(c => c !== ' ').length;
+  state.totalLetters   = [...word].filter(c => c !== ' ').length;
   state.correctLetters = 0;
 
   buildWordDisplay();
@@ -65,10 +116,14 @@ function startGame() {
   setCurrentBox();
   setKeyHint();
 
+  document.getElementById('word-counter').textContent =
+    `Ord ${index + 1}/${words.length}`;
+
   showScreen('game-screen');
 }
 
-// Hoppa över mellanslag automatiskt
+// --- Hoppa över mellanslag ---
+
 function skipSpaces() {
   while (
     state.currentIndex < state.targetText.length &&
@@ -130,14 +185,16 @@ function buildKeyboard() {
 
     row.forEach(letter => {
       const btn = document.createElement('button');
-      btn.className  = 'key';
-      btn.dataset.letter = letter;
+      btn.className        = 'key';
+      btn.dataset.letter   = letter;
+      btn.textContent      = letter;
       btn.setAttribute('aria-label', `Bokstav ${letter}`);
-      btn.textContent = letter;
 
-      const color = KEY_COLORS[ci % KEY_COLORS.length];
+      const color  = KEY_COLORS[ci % KEY_COLORS.length];
+      const shadow = `0 5px 0 ${darkenHex(color)}`;
       btn.style.backgroundColor = color;
-      btn.style.boxShadow = `0 5px 0 ${darkenHex(color)}`;
+      btn.style.boxShadow       = shadow;
+      btn.style.setProperty('--key-shadow', shadow);
 
       btn.addEventListener('pointerdown', e => {
         e.preventDefault();
@@ -152,24 +209,22 @@ function buildKeyboard() {
   });
 }
 
+// Markera nästa rätt tangent
 function setKeyHint(strong = false) {
   document.querySelectorAll('.key').forEach(k => k.classList.remove('hint','hint-strong'));
   if (state.currentIndex >= state.targetText.length) return;
 
   const target = state.targetText[state.currentIndex];
-  const key = document.querySelector(`.key[data-letter="${target}"]`);
+  const key    = document.querySelector(`.key[data-letter="${target}"]`);
   if (key) key.classList.add(strong ? 'hint-strong' : 'hint');
 }
 
 // --- Tangenthantering ---
 
 function pressKey(letter, btn) {
-  // Spela alltid upp bokstavsljudet
   speakLetter(letter);
-
   if (state.currentIndex >= state.targetText.length) return;
 
-  // Visuell animation på tangenten
   if (btn) {
     btn.classList.add('pressed');
     setTimeout(() => btn.classList.remove('pressed'), 160);
@@ -185,10 +240,9 @@ function pressKey(letter, btn) {
 function onCorrect() {
   const box = getBox(state.currentIndex);
   if (box) {
-    // Slumpmässig glad färg per bokstav
     const hue = Math.floor(Math.random() * 360);
     box.style.background = `hsl(${hue}, 65%, 55%)`;
-    box.classList.remove('current','wrong');
+    box.classList.remove('current','wrong','shake');
     box.classList.add('filled');
   }
 
@@ -211,8 +265,6 @@ function onWrong() {
   state.wrongAttempts++;
   const box = getBox(state.currentIndex);
   if (box) triggerShake(box);
-
-  // Efter 3 fel: stark ledtråd på tangenterna
   if (state.wrongAttempts >= 3) setKeyHint(true);
 }
 
@@ -254,33 +306,84 @@ function speakWord(text) {
 // --- Firande ---
 
 function celebrate() {
-  document.getElementById('celebration-word').textContent = state.targetText;
-  showScreen('celebration-screen');
-  setTimeout(() => speakWord(state.targetText), 350);
-  setTimeout(() => speakWord(state.targetText), 3200);
-  launchConfetti();
+  speakWord(state.targetText);
+
+  const isLastWord = currentWordIndex >= words.length - 1;
+
+  if (isLastWord) {
+    showFinalScreen();
+  } else {
+    showWordDoneScreen();
+  }
 }
 
-function launchConfetti() {
-  const COLORS  = ['#FF6B6B','#FFD43B','#69DB7C','#4DABF7','#FF8C42','#CC5DE8','#F06595','#FFA94D'];
-  const SHAPES  = ['round','square','star'];
-  const COUNT   = 200;
+function showWordDoneScreen() {
+  document.getElementById('done-word-label').textContent = state.targetText;
+  showScreen('word-done-screen');
+  launchBurstConfetti();
 
-  for (let i = 0; i < COUNT; i++) {
+  // Gå automatiskt vidare till nästa ord
+  setTimeout(() => {
+    currentWordIndex++;
+    loadWord(currentWordIndex);
+  }, 2400);
+}
+
+function showFinalScreen() {
+  showScreen('final-screen');
+  setTimeout(launchBurstConfetti, 100);
+  setTimeout(launchFallingConfetti, 600);
+  setTimeout(() => speakWord('Grattis'), 800);
+}
+
+// --- Konfetti ---
+
+function launchBurstConfetti() {
+  const count = 72;
+
+  for (let i = 0; i < count; i++) {
     setTimeout(() => {
       const el    = document.createElement('div');
-      const shape = SHAPES[Math.floor(Math.random() * SHAPES.length)];
+      const shape = CONFETTI_SHAPES[i % CONFETTI_SHAPES.length];
       el.className = `confetti ${shape}`;
 
-      const size = 8 + Math.random() * 13;
-      el.style.cssText = [
-        `left:${Math.random() * 100}vw`,
-        `width:${size}px`,
-        `height:${size}px`,
-        `background:${COLORS[Math.floor(Math.random() * COLORS.length)]}`,
-        `animation-duration:${2 + Math.random() * 2.2}s`,
-        `transform:rotate(${Math.random() * 360}deg)`,
-      ].join(';');
+      const angle    = (i / count) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
+      const speed    = 100 + Math.random() * 240;
+      const size     = 9 + Math.random() * 13;
+      const duration = 0.65 + Math.random() * 0.55;
+
+      el.style.left     = '50vw';
+      el.style.top      = '50vh';
+      el.style.width    = `${shape === 'ribbon' ? 5 : size}px`;
+      el.style.height   = `${size}px`;
+      el.style.background = CONFETTI_COLORS[i % CONFETTI_COLORS.length];
+      el.style.setProperty('--bx',   `${Math.cos(angle) * speed}px`);
+      el.style.setProperty('--by',   `${Math.sin(angle) * speed}px`);
+      el.style.setProperty('--brot', `${(Math.random() - 0.5) * 720}deg`);
+      el.style.animation = `confettiBurst ${duration}s ease-out forwards`;
+
+      document.body.appendChild(el);
+      el.addEventListener('animationend', () => el.remove(), { once: true });
+    }, i * 7);
+  }
+}
+
+function launchFallingConfetti() {
+  const count = 160;
+
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => {
+      const el    = document.createElement('div');
+      const shape = CONFETTI_SHAPES[Math.floor(Math.random() * CONFETTI_SHAPES.length)];
+      el.className = `confetti ${shape} falling`;
+
+      const size = 8 + Math.random() * 14;
+      el.style.left             = `${Math.random() * 100}vw`;
+      el.style.width            = `${shape === 'ribbon' ? 5 : size}px`;
+      el.style.height           = `${size}px`;
+      el.style.background       = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+      el.style.animationDuration = `${2 + Math.random() * 2.4}s`;
+      el.style.transform        = `rotate(${Math.random() * 360}deg)`;
 
       document.body.appendChild(el);
       el.addEventListener('animationend', () => el.remove(), { once: true });
@@ -288,11 +391,20 @@ function launchConfetti() {
   }
 }
 
+// --- Kattfallback ---
+
+function handleCatError(img) {
+  const div = document.createElement('div');
+  div.className   = 'cat-fallback';
+  div.textContent = '🐱';
+  img.parentNode.replaceChild(div, img);
+}
+
 // --- Hjälpfunktioner ---
 
 function triggerShake(el) {
   el.classList.remove('shake');
-  void el.offsetWidth; // förce reflow
+  void el.offsetWidth;
   el.classList.add('shake');
   el.addEventListener('animationend', () => el.classList.remove('shake'), { once: true });
 }
@@ -314,8 +426,9 @@ document.addEventListener('keydown', e => {
 // --- Init ---
 
 document.addEventListener('DOMContentLoaded', () => {
-  showParentScreen();
-  document.getElementById('parent-input').addEventListener('keydown', e => {
-    if (e.key === 'Enter') startGame();
+  showScreen('start-screen');
+
+  document.getElementById('word-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') addWord();
   });
 });
