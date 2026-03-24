@@ -11,33 +11,26 @@
 </head>
 <body>
 
-  <!-- 🏠 Startskärm -->
+  <!-- Startskarm -->
   <div id="start-screen" class="screen active">
-    <div class="polaroid">
-      <div class="polaroid-img">
-        <!-- Lägg till wwwroot/images/ayo.jpg för att visa foto -->
-        <img src="/images/ayo.jpg" alt="Ayo" class="ayo-photo" onerror="this.style.display='none'">
-        <div class="start-sparkle s1">✦</div>
-        <div class="start-sparkle s2">✦</div>
-        <div class="start-sparkle s3">✦</div>
-        <div class="start-overlay">
-          <h1 class="start-title">
-            <span class="c1">A</span><span class="c2">y</span><span class="c3">o</span><span class="c4">A</span><span class="c5">B</span><span class="c6">C</span>
-          </h1>
-          <button class="btn-play" onclick="showParentScreen()">SPELA</button>
-        </div>
+    <div class="start-bg">
+      <img src="/images/ayo.jpg" alt="Ayo" class="start-photo" onerror="this.style.display='none'">
+      <div class="start-overlay">
+        <h1 class="start-title">
+          <span class="c1">A</span><span class="c2">y</span><span class="c3">o</span><span class="c4">A</span><span class="c5">B</span><span class="c6">C</span>
+        </h1>
+        <button class="btn-play" onclick="showParentScreen()">SPELA</button>
       </div>
     </div>
   </div>
 
-  <!-- 👨‍👧 Föräldraskärm -->
+  <!-- Foraldraskarm -->
   <div id="parent-screen" class="screen">
     <div class="parent-wrap">
-      <button class="btn-home" onclick="showScreen('start-screen')">← Hem</button>
+      <button class="btn-home" onclick="showScreen('start-screen')">Hem</button>
       <div class="parent-header">
-        <span class="header-star">✳</span>
-        <h2 class="parent-h2">Hej förälder!</h2>
-        <p class="parent-sub">lista ord för barnet att öva:</p>
+        <h2 class="parent-h2">Hej foralder!</h2>
+        <p class="parent-sub">lista ord for barnet att ova:</p>
       </div>
       <input
         id="word-input"
@@ -51,15 +44,15 @@
       >
       <ul id="word-list" class="word-list"></ul>
       <button class="btn-start-session" id="btn-starta" onclick="startSession()">
-        Starta →
+        Starta
       </button>
     </div>
   </div>
 
-  <!-- 🎮 Spelskärm -->
+  <!-- Spelskarm -->
   <div id="game-screen" class="screen">
     <div class="game-top">
-      <button class="btn-back" onclick="showParentScreen()">←</button>
+      <button class="btn-back" onclick="showParentScreen()">Tillbaka</button>
       <span class="word-counter" id="word-counter"></span>
       <div class="progress-track"><div id="progress-fill"></div></div>
     </div>
@@ -67,21 +60,19 @@
     <div id="keyboard"></div>
   </div>
 
-  <!-- ⭐ Ord klarat -->
+  <!-- Ord klarat -->
   <div id="word-done-screen" class="screen">
-    <div class="big-star">⭐</div>
+    <div class="big-star">Bra!</div>
     <p class="done-word-label" id="done-word-label"></p>
   </div>
 
-  <!-- 🎉 Alla ord klara! -->
+  <!-- Alla ord klara -->
   <div id="final-screen" class="screen">
-    <div class="final-trophy">🏆</div>
     <div class="cat-frame">
-      <!-- Lägg till wwwroot/images/cat.gif för dansande katt -->
       <img src="/images/cat.gif" alt="Dansande katt" class="cat-gif" onerror="handleCatError(this)">
     </div>
     <div class="grattis">GRATTIS!!</div>
-    <button class="btn-again" onclick="showScreen('start-screen')">🎮 Spela igen!</button>
+    <button class="btn-again" onclick="showScreen('start-screen')">Spela igen!</button>
   </div>
 
   <script src="/js/app.js"></script>

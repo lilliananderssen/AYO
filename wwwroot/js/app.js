@@ -1,15 +1,15 @@
 // ================================
-// AYO ABC — Alfabetsspel för barn
+// AYO ABC — Alfabetsspel for barn
 // ================================
 
 'use strict';
 
-// --- Ordlista (föräldern fyller i) ---
+// --- Ordlista (foraldern fyller i) ---
 
 let words = [];
 let currentWordIndex = 0;
 
-// --- Spelställning ---
+// --- Spelstallning ---
 
 const state = {
   targetText:     '',
@@ -22,8 +22,8 @@ const state = {
 // --- Tangentbordslayout (svensk QWERTY) ---
 
 const KEYBOARD_ROWS = [
-  ['Q','W','E','R','T','Y','U','I','O','P','Å'],
-  ['A','S','D','F','G','H','J','K','L','Ö','Ä'],
+  ['Q','W','E','R','T','Y','U','I','O','P','\u00c5'],
+  ['A','S','D','F','G','H','J','K','L','\u00d6','\u00c4'],
   ['Z','X','C','V','B','N','M'],
 ];
 
@@ -39,12 +39,23 @@ const CONFETTI_COLORS = [
 ];
 const CONFETTI_SHAPES = ['round','square','star','ribbon'];
 
-// --- Skärmhantering ---
+// --- Fonetisk karta (ljud, inte bokstavsnamn) ---
+
+const LETTER_SOUNDS = {
+  'A': 'a', 'B': 'b\u00e4', 'C': 's\u00e4', 'D': 'd\u00e4', 'E': 'e',
+  'F': 'f\u00e4', 'G': 'g\u00e4', 'H': 'h\u00e4', 'I': 'i', 'J': 'j\u00e4',
+  'K': 'k\u00e4', 'L': 'l\u00e4', 'M': 'm\u00e4', 'N': 'n\u00e4', 'O': 'o',
+  'P': 'p\u00e4', 'Q': 'k\u00e4', 'R': 'r\u00e4', 'S': 's\u00e4', 'T': 't\u00e4',
+  'U': 'u', 'V': 'v\u00e4', 'W': 'v\u00e4', 'X': 'ks', 'Y': 'y',
+  'Z': 's\u00e4', '\u00c5': '\u00e5', '\u00c4': '\u00e4', '\u00d6': '\u00f6'
+};
+
+// --- Skarmhantering ---
 
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   const screen = document.getElementById(id);
-  void screen.offsetWidth; // starta om animationen
+  void screen.offsetWidth;
   screen.classList.add('active');
 }
 
@@ -53,7 +64,7 @@ function showParentScreen() {
   setTimeout(() => document.getElementById('word-input').focus(), 80);
 }
 
-// --- Föräldraskärm: lägg till / ta bort ord ---
+// --- Foraldraskarm: lagg till / ta bort ord ---
 
 function addWord() {
   const input = document.getElementById('word-input');
@@ -82,17 +93,16 @@ function renderWordList() {
     li.className = 'word-item';
     li.innerHTML = `
       <span class="word-item-text">${w}</span>
-      <button class="btn-delete" onclick="removeWord(${i})" aria-label="Ta bort ${w}">🗑</button>
+      <button class="btn-delete" onclick="removeWord(${i})" aria-label="Ta bort ${w}">x</button>
     `;
     list.appendChild(li);
   });
 
-  // Visa/dölj startknapp
   const btn = document.getElementById('btn-starta');
   btn.classList.toggle('visible', words.length > 0);
 }
 
-// --- Starta spelomgång ---
+// --- Starta spelomgang ---
 
 function startSession() {
   if (words.length === 0) return;
@@ -122,7 +132,7 @@ function loadWord(index) {
   showScreen('game-screen');
 }
 
-// --- Hoppa över mellanslag ---
+// --- Hoppa over mellanslag ---
 
 function skipSpaces() {
   while (
@@ -188,7 +198,6 @@ function buildKeyboard() {
       btn.className        = 'key';
       btn.dataset.letter   = letter;
       btn.textContent      = letter;
-      btn.setAttribute('aria-label', `Bokstav ${letter}`);
 
       const color  = KEY_COLORS[ci % KEY_COLORS.length];
       const shadow = `0 5px 0 ${darkenHex(color)}`;
@@ -209,7 +218,6 @@ function buildKeyboard() {
   });
 }
 
-// Markera nästa rätt tangent
 function setKeyHint(strong = false) {
   document.querySelectorAll('.key').forEach(k => k.classList.remove('hint','hint-strong'));
   if (state.currentIndex >= state.targetText.length) return;
@@ -284,9 +292,10 @@ const synth = window.speechSynthesis;
 function speakLetter(letter) {
   if (!synth) return;
   synth.cancel();
-  const u = new SpeechSynthesisUtterance(letter);
+  const sound = LETTER_SOUNDS[letter] || letter.toLowerCase();
+  const u = new SpeechSynthesisUtterance(sound);
   u.lang   = 'sv-SE';
-  u.rate   = 0.8;
+  u.rate   = 0.85;
   u.pitch  = 1.3;
   u.volume = 1;
   synth.speak(u);
@@ -322,7 +331,6 @@ function showWordDoneScreen() {
   showScreen('word-done-screen');
   launchBurstConfetti();
 
-  // Gå automatiskt vidare till nästa ord
   setTimeout(() => {
     currentWordIndex++;
     loadWord(currentWordIndex);
@@ -396,11 +404,11 @@ function launchFallingConfetti() {
 function handleCatError(img) {
   const div = document.createElement('div');
   div.className   = 'cat-fallback';
-  div.textContent = '🐱';
+  div.textContent = 'Bra jobbat!';
   img.parentNode.replaceChild(div, img);
 }
 
-// --- Hjälpfunktioner ---
+// --- Hjalpfunktioner ---
 
 function triggerShake(el) {
   el.classList.remove('shake');
@@ -416,7 +424,7 @@ document.addEventListener('keydown', e => {
   if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
 
   const k = e.key.toUpperCase();
-  if (/^[A-ZÅÄÖ]$/.test(k)) {
+  if (/^[A-Z\u00c5\u00c4\u00d6]$/.test(k)) {
     e.preventDefault();
     const btn = document.querySelector(`.key[data-letter="${k}"]`);
     pressKey(k, btn);
